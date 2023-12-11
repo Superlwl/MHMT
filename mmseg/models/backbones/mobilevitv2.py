@@ -9,8 +9,8 @@ import math
 
 
 @MODELS.register_module()
-class MobileViT(BaseModule):
-    def __init__(self, image_size, dims, channels, num_classes, input_channel=3, depths=[2, 4, 3], expansion=4, kernel_size=3,
+class MobileViTv2(BaseModule):
+    def __init__(self, image_size, dims, channels, input_channel=3, depths=[2, 4, 3], expansion=4, kernel_size=3,
                  patch_size=2):
         super().__init__()
         ih, iw = image_size[0], image_size[1]
@@ -192,40 +192,6 @@ class FeedForward(nn.Module):
         return self.net(x)
 
 
-class Attention(nn.Module):
-    def __init__(self, dim, heads, head_dim, dropout):
-        super().__init__()
-        inner_dim = heads * head_dim
-        project_out = not (heads == 1 and head_dim == dim)
-        '''如果head==1并且head_dim==dim,project_out=False,否则project_out=True'''
-
-        self.heads = heads
-        self.scale = head_dim ** -0.5
-
-        self.attend = nn.Softmax(dim=-1)
-        self.to_qkv = nn.Linear(dim, inner_dim * 3, bias=False)
-
-        self.to_out = nn.Sequential(
-            nn.Linear(inner_dim, dim),
-            nn.Dropout(dropout)
-        ) if project_out else nn.Identity()
-
-    def forward(self, x):
-        # print(x.shape)
-        qkv = self.to_qkv(x).chunk(3, dim=-1)
-        # print('qkv', qkv[0].shape)
-        # chunk对数组进行分组,3表示组数，dim表示在哪一个维度.这里返回的qkv为一个包含三组张量的元组
-        q, k, v = map(lambda t: rearrange(t, 'b p n (h d) -> b p h n d', h=self.heads), qkv)
-        # print(q.shape)
-        # print(k.shape)
-        # print(v.shape)
-        dots = torch.matmul(q, k.transpose(-1, -2)) * self.scale
-        attn = self.attend(dots)
-        out = torch.matmul(attn, v)
-        out = rearrange(out, 'b p h n d -> b p n (h d)')
-        # print('self.to_out', self.to_out(out).shape)
-        return self.to_out(out)
-
 
 class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, head_dim, mlp_dim, dropout=0.):
@@ -322,19 +288,19 @@ class MV2Block(nn.Module):
 def mobilevit_xxs():
     dims = [60, 80, 96]
     channels = [16, 16, 24, 24, 48, 64, 80, 320]
-    return MobileViT(224, dims, channels, num_classes=1000)
+    return MobileViTv2(224, dims, channels, num_classes=1000)
 
 
 def mobilevit_xs():
     dims = [96, 120, 144]
     channels = [16, 32, 48, 48, 64, 80, 96, 384]
-    return MobileViT(224, dims, channels, num_classes=1000)
+    return MobileViTv2(224, dims, channels, num_classes=1000)
 
 
 def mobilevit_s():
     dims = [144, 192, 240]
     channels = [16, 32, 64, 64, 96, 128, 160, 640]
-    return MobileViT((140, 480), dims, channels, num_classes=16)
+    return MobileViTv2((140, 480), dims, channels, num_classes=16)
 
 
 def count_paratermeters(model):

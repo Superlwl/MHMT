@@ -23,12 +23,15 @@ from .timm_backbone import TIMMBackbone
 from .twins import PCPVT, SVT
 from .unet import UNet
 from .vit import VisionTransformer
-from .mobilevitv2 import MobileViT
+from .mobilevitv2 import MobileViTv2
 from .pvt import PVT
 from .edgevit import EdgeVit
 from .cmt import CMT
 from .lvt import LVT
 from .flatten_pvt import FlattenPvt
+from .pvtv2 import PVTV2
+from .flatten_pvtv2 import FlattenPVTv2
+
 
 __all__ = [
     'ResNet', 'ResNetV1c', 'ResNetV1d', 'ResNeXt', 'HRNet', 'FastSCNN',
@@ -36,5 +39,5 @@ __all__ = [
     'VisionTransformer', 'SwinTransformer', 'MixVisionTransformer',
     'BiSeNetV1', 'BiSeNetV2', 'ICNet', 'TIMMBackbone', 'ERFNet', 'PCPVT',
     'SVT', 'STDCNet', 'STDCContextPathNet', 'BEiT', 'MAE', 'PIDNet', 'MSCAN',
-    'DDRNet', 'MobileViT', 'PVT', 'EdgeVit', 'CMT', 'LVT', 'FlattenPvt'
+    'DDRNet', 'MobileViTv2', 'MobileViTv1', 'PVT', 'EdgeVit', 'CMT', 'LVT', 'FlattenPvt', 'PVTV2', 'FlattenPVTv2'
 ]

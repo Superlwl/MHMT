@@ -145,9 +145,9 @@ def slide_crop_label(src_path, out_dir, mode, patch_H, patch_W, overlap):
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Convert iSAID dataset to mmsegmentation format')
-    parser.add_argument('dataset_path', help='iSAID folder path', default='/home/lyu4/lwl_wp/mmsegmentation/data/iSAID')
+    parser.add_argument('dataset_path', help='iSAID folder path')
     parser.add_argument('--tmp_dir', help='path of the temporary directory')
-    parser.add_argument('-o', '--out_dir', help='output path', default='/home/lyu4/lwl_wp/mmsegmentation/data/iSAID/isaid/iSAID')
+    parser.add_argument('-o', '--out_dir', help='output path')
 
     parser.add_argument(
         '--patch_width',

@@ -710,3 +710,12 @@ class ResNetV1d(ResNet):
 
     def __init__(self, **kwargs):
         super().__init__(deep_stem=True, avg_down=True, **kwargs)
+        
+if __name__ == '__main__':
+    model = EfficientViT_M3()
+    # print(model)
+
+    inputs = torch.FloatTensor(np.random.rand(1, 3, 512, 512))
+    outs = model(inputs)
+    for out in outs:
+        print(out.shape)

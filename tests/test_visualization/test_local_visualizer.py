@@ -17,9 +17,9 @@ from mmseg.visualization import SegLocalVisualizer
 class TestSegLocalVisualizer(TestCase):
 
     def test_add_datasample(self):
-        h = 10
-        w = 12
-        num_class = 2
+        h = 1024
+        w = 1024
+        num_class = 7
         out_file = 'out_file'
 
         image = np.random.randint(0, 256, size=(h, w, 3)).astype('uint8')
@@ -76,21 +76,21 @@ class TestSegLocalVisualizer(TestCase):
         test_add_datasample_forward(gt_sem_seg)
 
     def test_cityscapes_add_datasample(self):
-        h = 128
-        w = 256
-        num_class = 19
-        out_file = 'out_file_cityscapes'
+        h = 1024
+        w = 1024
+        num_class = 7
+        out_file = 'out_file_loveda'
 
         image = mmcv.imread(
             osp.join(
                 osp.dirname(__file__),
-                '../data/pseudo_cityscapes_dataset/leftImg8bit/val/frankfurt/frankfurt_000000_000294_leftImg8bit.png'  # noqa
+                '../data/LoveDA/img_dir/val/2522.png'  # noqa
             ),
             'color')
         sem_seg = mmcv.imread(
             osp.join(
                 osp.dirname(__file__),
-                '../data/pseudo_cityscapes_dataset/gtFine/val/frankfurt/frankfurt_000000_000294_gtFine_labelTrainIds.png'  # noqa
+                '../data/LoveDA/ann_dir/val/2522.png'  # noqa
             ),
             'unchanged')
         sem_seg = torch.unsqueeze(torch.from_numpy(sem_seg), 0)
@@ -106,18 +106,10 @@ class TestSegLocalVisualizer(TestCase):
                     vis_backends=[dict(type='LocalVisBackend')],
                     save_dir=tmp_dir)
                 seg_local_visualizer.dataset_meta = dict(
-                    classes=('road', 'sidewalk', 'building', 'wall', 'fence',
-                             'pole', 'traffic light', 'traffic sign',
-                             'vegetation', 'terrain', 'sky', 'person', 'rider',
-                             'car', 'truck', 'bus', 'train', 'motorcycle',
-                             'bicycle'),
-                    palette=[[128, 64, 128], [244, 35, 232], [70, 70, 70],
-                             [102, 102, 156], [190, 153, 153], [153, 153, 153],
-                             [250, 170, 30], [220, 220, 0], [107, 142, 35],
-                             [152, 251, 152], [70, 130, 180], [220, 20, 60],
-                             [255, 0, 0], [0, 0, 142], [0, 0, 70],
-                             [0, 60, 100], [0, 80, 100], [0, 0, 230],
-                             [119, 11, 32]])
+                    classes=('background', 'building', 'road', 'water', 'barren', 'forest',
+                 'agricultural'),
+                    palette=[[255, 255, 255], [255, 0, 0], [255, 255, 0], [0, 0, 255],
+                 [159, 129, 183], [0, 255, 0], [255, 195, 128]])
                 # test out_file
                 seg_local_visualizer.add_datasample(
                     out_file,

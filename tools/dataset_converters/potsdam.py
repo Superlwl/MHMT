@@ -22,12 +22,12 @@ def parse_args():
         '--clip_size',
         type=int,
         help='clipped size of image after preparation',
-        default=512)
+        default=1024)
     parser.add_argument(
         '--stride_size',
         type=int,
         help='stride of clipping original images',
-        default=256)
+        default=512)
     args = parser.parse_args()
     return args
 

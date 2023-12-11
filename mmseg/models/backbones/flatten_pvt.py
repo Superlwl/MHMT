@@ -110,6 +110,7 @@ class FocusedLinearAttention(nn.Module):
               format(sr_ratio, focusing_factor, kernel_size))
 
     def forward(self, x, H, W):
+        # print(x.shape)
         B, N, C = x.shape
         q = self.q(x)
 
@@ -121,6 +122,8 @@ class FocusedLinearAttention(nn.Module):
         else:
             kv = self.kv(x).reshape(B, -1, 2, C).permute(2, 0, 1, 3)
         k, v = kv[0], kv[1]
+        # print(k.shape)
+        # print(self.positional_encoding.shape)
 
         k = k + self.positional_encoding
         focusing_factor = self.focusing_factor

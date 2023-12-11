@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'iSAIDDataset'
-data_root = '/home/lyu4/lwl_wp/mmsegmentation/data/iSAID'
+data_root = 'data/iSAID'
 """
 This crop_size setting is followed by the implementation of
 `PointFlow: Flowing Semantics Through Points for Aerial Image
@@ -22,12 +22,21 @@ train_pipeline = [
     dict(type='PhotoMetricDistortion'),
     dict(type='PackSegInputs')
 ]
-test_pipeline = [
+val_pipeline = [
     dict(type='LoadImageFromFile'),
     # dict(type='Resize', scale=(896, 896), keep_ratio=True),
     # add loading annotation after ``Resize`` because ground truth
     # does not need to do resize data transform
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
+    dict(type='LoadAnnotations'),
+    dict(type='PackSegInputs')
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    # dict(type='Resize', scale=(896, 896), keep_ratio=True),
+    # add loading annotation after ``Resize`` because ground truth
+    # does not need to do resize data transform
+    # dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='LoadAnnotations'),
     dict(type='PackSegInputs')
 ]
@@ -67,7 +76,7 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         data_prefix=dict(img_path='img_dir/val', seg_map_path='ann_dir/val'),
-        pipeline=test_pipeline))
+        pipeline=val_pipeline))
 test_dataloader = dict(
     batch_size=1,
     num_workers=4,
